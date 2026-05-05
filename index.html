@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Engine™ Calculator — $100K Day Formula™</title>
+<style>
+:root { color-scheme: light; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#0f172a;min-height:100vh;}
+.wrap{max-width:940px;margin:0 auto;padding:32px 20px 60px;}
+
+/* Header */
+.hdr{text-align:center;margin-bottom:32px;}
+.hdr-badge{display:inline-block;padding:4px 16px;background:#fef3c7;border:1px solid #fcd34d;border-radius:20px;font-size:11px;font-weight:700;color:#92400e;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.hdr h1{font-size:30px;font-weight:800;color:#0f172a;margin-bottom:10px;letter-spacing:-0.5px;line-height:1.2;}
+.hdr p{font-size:15px;color:#475569;max-width:600px;margin:0 auto;line-height:1.8;}
+
+/* Cards */
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.card-alt{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:20px 22px;}
+.mb14{margin-bottom:14px;} .mb18{margin-bottom:18px;} .mb24{margin-bottom:24px;}
+
+/* Section label */
+.slabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#b45309;display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.slabel::before,.slabel::after{content:'';flex:1;height:1px;background:#e2e8f0;}
+.slabel.blue{color:#1d4ed8;} .slabel.green{color:#15803d;} .slabel.purple{color:#6d28d9;}
+
+/* Phase tabs */
+.tabs{display:flex;gap:10px;margin-bottom:14px;}
+.tab{flex:1;padding:14px 8px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;cursor:pointer;font-family:inherit;font-weight:700;text-align:center;transition:all .2s;color:#94a3b8;line-height:1.5;}
+.tab-icon{font-size:20px;margin-bottom:3px;}
+.tab-name{font-size:14px;}
+.tab-ticket{font-size:12px;font-weight:400;opacity:.75;margin-top:2px;}
+.tab.a1{border-color:#8b5cf6;background:#f5f3ff;color:#6d28d9;}
+.tab.a2{border-color:#3b82f6;background:#eff6ff;color:#1d4ed8;}
+.tab.a3{border-color:#f59e0b;background:#fffbeb;color:#92400e;}
+.tab.a4{border-color:#22c55e;background:#f0fdf4;color:#15803d;}
+
+/* Phase description */
+.phase-desc{border-radius:10px;padding:14px 18px;font-size:14px;line-height:1.7;color:#475569;}
+.pd1{background:#f5f3ff;border:1px solid #c4b5fd;}
+.pd2{background:#eff6ff;border:1px solid #93c5fd;}
+.pd3{background:#fffbeb;border:1px solid #fcd34d;}
+.pd4{background:#f0fdf4;border:1px solid #86efac;}
+.phase-desc .pdtitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+
+/* Grid layouts */
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:18px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+.g3s{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+.g3rev{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+.g4roi{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:18px;}
+
+/* Input */
+.ig{margin-bottom:14px;}
+.ilabel{display:flex;justify-content:space-between;margin-bottom:4px;}
+.ilabel label{font-size:12px;color:#475569;font-weight:500;}
+.ilabel .hint{font-size:10px;color:#94a3b8;}
+.iw{display:flex;align-items:center;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;transition:border-color .2s;}
+.iw:focus-within{border-color:#94a3b8;}
+.ipfx,.isfx{padding:9px 0 9px 12px;color:#94a3b8;font-size:14px;flex-shrink:0;user-select:none;}
+.isfx{padding:9px 12px 9px 0;}
+.iw input{flex:1;background:transparent;border:none;color:#0f172a;font-size:15px;font-weight:600;padding:9px 12px;outline:none;font-family:inherit;width:100%;}
+.idisabled{opacity:.4;}
+
+/* Toggle */
+.toggle{display:flex;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:3px;margin-bottom:14px;}
+.tbtn{flex:1;padding:8px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;background:transparent;color:#94a3b8;transition:all .2s;}
+.tbtn.on{background:#b45309;color:#fff;}
+
+/* Stat card */
+.scard{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.scard.hl{background:linear-gradient(135deg,#fef3c7,#fff);border-color:#fcd34d;}
+.scard.a2c{background:linear-gradient(135deg,#f5f3ff,#fff);border-color:#c4b5fd;}
+.scard.gc{background:linear-gradient(135deg,#f0fdf4,#fff);border-color:#86efac;}
+.sc-label{font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.8px;line-height:1.3;margin-bottom:4px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px;}
+.sc-val{font-size:24px;font-weight:700;color:#0f172a;letter-spacing:-.5px;}
+.scard.hl .sc-val{color:#92400e;}
+.scard.a2c .sc-val{color:#6d28d9;}
+.scard.gc .sc-val{color:#15803d;}
+.sc-sub{font-size:11px;color:#64748b;margin-top:2px;}
+
+/* Badge */
+.bdg{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;}
+.bpass{background:#dcfce7;color:#15803d;border:1px solid rgba(134,239,172,.4);}
+.bwarn{background:#fef3c7;color:#d97706;border:1px solid rgba(252,211,77,.4);}
+.bfail{background:#fee2e2;color:#dc2626;border:1px solid rgba(252,165,165,.4);}
+.binfo{background:#fef3c7;color:#b45309;border:1px solid rgba(252,211,77,.4);}
+.bpurp{background:#ede9fe;color:#6d28d9;border:1px solid rgba(196,181,253,.4);}
+
+/* Comparison table */
+.cmp-hdr{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:8px;padding:0 0 8px;border-bottom:2px solid #e2e8f0;margin-bottom:4px;}
+.cmp-row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;}
+.ch{font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;text-align:right;}
+.ch:first-child{text-align:left;}
+.cl{font-size:12px;color:#475569;}
+.ca{font-size:13px;font-weight:600;text-align:right;}
+.cb{font-size:13px;font-weight:600;text-align:right;}
+.cd{font-size:12px;font-weight:700;text-align:right;color:#15803d;}
+
+/* Info box */
+.ibox{border-radius:8px;padding:10px 12px;font-size:12px;color:#475569;line-height:1.5;margin-top:4px;}
+.ibox-p{background:#f5f3ff;border:1px solid rgba(196,181,253,.3);}
+.ibox-g{background:#fef3c7;border:1px solid rgba(252,211,77,.3);}
+.ibox-gr{background:#f0fdf4;border:1px solid rgba(134,239,172,.3);}
+
+/* Pre-close block */
+.preclose{background:linear-gradient(135deg,#fffbeb 0%,#fff 100%);border:1px solid rgba(252,211,77,.5);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+
+/* Insight */
+.insight{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:20px 22px;margin-bottom:24px;}
+.ins-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+.ins-ico{font-size:14px;flex-shrink:0;margin-top:2px;}
+.ins-txt{font-size:13px;color:#475569;line-height:1.6;}
+
+/* Phase 1 attendance block */
+.att-block{background:linear-gradient(135deg,#f5f3ff 0%,#fff 100%);border:1px solid rgba(196,181,253,.5);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+
+/* CTA */
+.cta{background:linear-gradient(135deg,#1a1000 0%,#0f172a 100%);border:1px solid rgba(252,211,77,.3);border-radius:16px;padding:40px;text-align:center;}
+.cta-eye{font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;}
+.cta h2{font-size:26px;font-weight:800;color:#fff;line-height:1.3;max-width:560px;margin:0 auto 14px;}
+.cta-body{font-size:15px;color:#94a3b8;line-height:1.8;max-width:520px;margin:0 auto 10px;}
+.vstack{display:inline-block;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:16px 24px;margin:18px auto;max-width:480px;}
+.vr{display:flex;justify-content:space-between;gap:24px;margin-bottom:6px;font-size:13px;}
+.vr span:first-child{color:#94a3b8;} .vr span:last-child{color:#64748b;white-space:nowrap;}
+.vtot{border-top:1px solid #1e293b;margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;font-size:13px;}
+.vtot span:first-child{color:#94a3b8;font-weight:700;} .vtot span:last-child{color:#64748b;text-decoration:line-through;}
+.cta-sub{font-size:13px;color:#475569;line-height:1.7;max-width:500px;margin:0 auto 22px;}
+.cta-btn{display:inline-block;background:#f59e0b;color:#000;padding:16px 40px;border-radius:10px;font-weight:800;font-size:16px;text-decoration:none;letter-spacing:.3px;}
+.cta-guar{font-size:13px;color:#475569;margin-top:16px;line-height:1.6;max-width:460px;margin:16px auto 0;}
+.footer{text-align:center;margin-top:28px;font-size:11px;color:#94a3b8;}
+
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-badge">$100K Day Formula™</div>
+  <h1>Cash Flow Engine™ Calculator</h1>
+  <p>Most coaches and experts are throwing money and time at broken event ticket systems — and have no idea what their numbers actually look like. This calculator solves that. See exactly what your event is worth at every phase, <em>before you pitch a single thing.</em></p>
+</div>
+
+<!-- PHASE SELECTOR -->
+<div class="card mb18">
+  <div class="slabel">Select Your Phase</div>
+  <div class="tabs">
+    <button class="tab" id="tab1" onclick="setPhase(1)"><div class="tab-icon">🎯</div><div class="tab-name">Phase 1</div><div class="tab-ticket">Free</div></button>
+    <button class="tab" id="tab2" onclick="setPhase(2)"><div class="tab-icon">⚡</div><div class="tab-name">Phase 2</div><div class="tab-ticket">$1 ticket</div></button>
+    <button class="tab" id="tab3" onclick="setPhase(3)"><div class="tab-icon">🚀</div><div class="tab-name">Phase 3</div><div class="tab-ticket">$27 ticket</div></button>
+    <button class="tab" id="tab4" onclick="setPhase(4)"><div class="tab-icon">💎</div><div class="tab-name">Phase 4</div><div class="tab-ticket">$97 ticket</div></button>
+  </div>
+  <div id="phase-desc" class="phase-desc"></div>
+</div>
+
+<!-- ═══════════════════ PHASE 1 ═══════════════════ -->
+<div id="p1">
+  <div class="phase-desc pd1 mb18">
+    <div class="pdtitle" style="color:#6d28d9;">Phase 1 — What You're Optimising For</div>
+    Phase 1 isn't about revenue — it's about <strong>attendance and data.</strong> Your goal is to get as many of the right people in the room as possible so you can validate your message. The bribe on your thank-you page is the single highest-leverage tool for lifting show rates on a free event. More bodies in the room = more survey responses = faster message validation = a stronger Phase 2.
+  </div>
+  <div class="g3">
+    <!-- Traffic -->
+    <div class="card">
+      <div class="slabel blue">Traffic</div>
+      <div class="ig"><div class="ilabel"><label>Monthly Ad Spend</label><span class="hint">Start lean</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="p1as" value="3000" min="500" step="500" oninput="c1()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Cost Per Lead</label><span class="hint">Free events: $8–$12</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="p1cpl" value="10" min="5" max="50" oninput="c1()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Events Per Month</label><span class="hint">Weekly = 4</span></div><div class="iw"><input type="number" id="p1ev" value="4" min="1" max="12" oninput="c1()"></div></div>
+    </div>
+    <!-- Show-Up Rates -->
+    <div class="card">
+      <div class="slabel purple">Show-Up Rates</div>
+      <div class="ig"><div class="ilabel"><label>Baseline Show Rate (no bribe)</label><span class="hint">Free events avg: 30–40%</span></div><div class="iw"><input type="number" id="p1sb" value="35" min="10" max="80" oninput="c1()"><span class="isfx">%</span></div></div>
+      <div class="ig"><div class="ilabel"><label>Show Rate With Bribe</label><span class="hint">With bribe: 50–65%</span></div><div class="iw"><input type="number" id="p1sw" value="58" min="10" max="90" oninput="c1()"><span class="isfx">%</span></div></div>
+      <div id="p1lift" class="ibox ibox-p" style="margin-top:0;"></div>
+    </div>
+    <!-- Bribe -->
+    <div class="card">
+      <div class="slabel">Thank-You Page Bribe</div>
+      <div class="ilabel"><label>Bribe Type</label><span class="hint">Paid = revenue + lift</span></div>
+      <div class="toggle">
+        <button class="tbtn on" id="bfree" onclick="setBribe(false)">Free Bonus</button>
+        <button class="tbtn" id="bpaid" onclick="setBribe(true)">Paid Upgrade</button>
+      </div>
+      <div id="bribe-paid">
+        <div class="ig"><div class="ilabel"><label>Bribe Price</label><span class="hint">e.g. $27 workbook</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="p1bp" value="27" min="7" step="5" oninput="c1()"></div></div>
+        <div class="ig"><div class="ilabel"><label>Take Rate</label><span class="hint">Typical: 15–25%</span></div><div class="iw"><input type="number" id="p1br" value="20" min="5" max="60" oninput="c1()"><span class="isfx">%</span></div></div>
+        <div id="p1brev" class="ibox ibox-g"></div>
+      </div>
+      <div id="bribe-free" class="ibox ibox-p hidden">
+        <strong style="color:#6d28d9;">Free Bribe Examples:</strong>
+        <ul style="margin-top:6px;padding-left:16px;font-size:12px;">
+          <li style="margin-bottom:4px;">"Show up live and I'll send you [resource]"</li>
+          <li style="margin-bottom:4px;">Exclusive bonus for live attendees only</li>
+          <li style="margin-bottom:4px;">Live Q&A at the end — registrants only</li>
+          <li>Early access or recording for show-ups only</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attendance Impact -->
+  <div class="att-block">
+    <div class="slabel purple">Attendance Impact — Per Month</div>
+    <div class="g4">
+      <div class="scard" id="p1-reg"></div>
+      <div class="scard" id="p1-base"></div>
+      <div class="scard a2c" id="p1-brib"></div>
+      <div class="scard hl" id="p1-extr"></div>
+    </div>
+  </div>
+
+  <!-- Downstream Value -->
+  <div class="card mb14">
+    <div class="slabel green">Downstream Value — What Those Extra Attendees Are Worth in Phase 2</div>
+    <div class="g4" style="margin-bottom:14px;">
+      <div class="ig"><div class="ilabel"><label>Phase 2 Offer Price</label><span class="hint">Beta offer</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="p1p2p" value="997" min="0" step="100" oninput="c1()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Session Fee (if any)</label><span class="hint">$0 = free call</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="p1p2s" value="0" min="0" step="50" oninput="c1()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Attendee → Booking Rate</label><span class="hint">2–5% typical</span></div><div class="iw"><input type="number" id="p1bk" value="2" min="0.5" max="20" step="0.5" oninput="c1()"><span class="isfx">%</span></div></div>
+      <div class="ig"><div class="ilabel"><label>Booking → Enrollment Rate</label><span class="hint">30–60% typical</span></div><div class="iw"><input type="number" id="p1en" value="50" min="10" max="90" oninput="c1()"><span class="isfx">%</span></div></div>
+    </div>
+    <div class="g3s">
+      <div class="scard" id="p1-xbk"></div>
+      <div class="scard" id="p1-xcl"></div>
+      <div class="scard hl" id="p1-xrv"></div>
+    </div>
+  </div>
+
+  <!-- Comparison -->
+  <div class="card-alt mb14">
+    <div class="slabel">No Bribe vs. With Bribe</div>
+    <div class="cmp-hdr">
+      <span class="ch" style="text-align:left;">Metric</span>
+      <span class="ch">No Bribe</span>
+      <span class="ch" style="color:#6d28d9;">With Bribe</span>
+      <span class="ch">Lift</span>
+    </div>
+    <div id="p1-cmp"></div>
+  </div>
+
+  <!-- Insight -->
+  <div class="insight" id="p1-ins"></div>
+</div>
+
+<!-- ═══════════════════ PHASES 2–4 ═══════════════════ -->
+<div id="ppaid" class="hidden">
+  <div id="paid-banner" class="mb18"></div>
+  <div class="g3">
+    <!-- Traffic -->
+    <div class="card">
+      <div class="slabel blue">Traffic</div>
+      <div class="ig"><div class="ilabel"><label>Monthly Ad Spend</label><span class="hint">ZSS default: $6,800</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="pas" value="6800" min="500" step="500" oninput="cp()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Cost Per Lead</label><span class="hint">Target: $15</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="pcpl" value="15" min="5" max="50" oninput="cp()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Events Per Month</label><span class="hint">Weekly = 4</span></div><div class="iw"><input type="number" id="pev" value="4" min="1" max="12" oninput="cp()"></div></div>
+    </div>
+    <!-- Ticket Economics -->
+    <div class="card">
+      <div class="slabel">Ticket Economics</div>
+      <div class="ig"><div class="ilabel"><label>Ticket Price</label></div><div class="iw"><span class="ipfx">$</span><input type="number" id="ptk" value="27" min="0" step="1" oninput="cp()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Show-Up Rate</label></div><div class="iw"><input type="number" id="psh" value="55" min="10" max="100" oninput="cp()"><span class="isfx">%</span></div></div>
+      <div id="bump-row">
+        <div class="ig"><div class="ilabel"><label>Order Bump Price</label></div><div class="iw"><span class="ipfx">$</span><input type="number" id="pbp" value="17" min="0" step="5" oninput="cp()"></div></div>
+        <div class="ig"><div class="ilabel"><label>Bump Take Rate</label></div><div class="iw"><input type="number" id="pbr" value="35" min="0" max="80" oninput="cp()"><span class="isfx">%</span></div></div>
+      </div>
+      <div class="ig"><div class="ilabel"><label>VIP Upgrade Price</label></div><div class="iw"><span class="ipfx">$</span><input type="number" id="pvp" value="97" min="0" step="10" oninput="cp()"></div></div>
+      <div class="ig"><div class="ilabel"><label>VIP Take Rate</label></div><div class="iw"><input type="number" id="pvr" value="20" min="0" max="50" oninput="cp()"><span class="isfx">%</span></div></div>
+    </div>
+    <!-- Zero Selling Close -->
+    <div class="card">
+      <div class="slabel green">Zero Selling Close</div>
+      <div class="ig"><div class="ilabel"><label id="lbl-sf">Strategy Session Fee</label><span class="hint" id="hnt-sf">Default: $299</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="psf" value="299" min="0" step="50" oninput="cp()"></div></div>
+      <div class="ig"><div class="ilabel"><label>Attendee → Booking Rate</label><span class="hint" id="hnt-bk">~7% of attendees</span></div><div class="iw"><input type="number" id="pbkr" value="7" min="0.5" max="30" step="0.5" oninput="cp()"><span class="isfx">%</span></div></div>
+      <div class="ig"><div class="ilabel"><label>Booking Show Rate</label><span class="hint" id="hnt-bs">Paid: 85–95%</span></div><div class="iw"><input type="number" id="pss" value="90" min="50" max="100" oninput="cp()"><span class="isfx">%</span></div></div>
+      <div class="ig"><div class="ilabel"><label>Enrollment Rate</label><span class="hint">ZSS avg: 60–80%</span></div><div class="iw"><input type="number" id="per" value="65" min="10" max="90" oninput="cp()"><span class="isfx">%</span></div></div>
+      <div class="ig"><div class="ilabel"><label id="lbl-pp">Program Price</label><span class="hint" id="hnt-pp">Default: $5,964</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="ppp" value="5964" min="100" step="100" oninput="cp()"></div></div>
+      <div id="ph4-note" class="ibox ibox-gr hidden"></div>
+    </div>
+  </div>
+
+  <!-- Pre-Close -->
+  <div class="preclose">
+    <div class="slabel">Pre-Close Revenue — Before Your First Sale</div>
+    <div class="g4">
+      <div class="scard" id="pc-tk"></div>
+      <div class="scard" id="pc-bm"></div>
+      <div class="scard" id="pc-vp"></div>
+      <div class="scard hl" id="pc-tot"></div>
+    </div>
+  </div>
+
+  <!-- Revenue -->
+  <div class="g3rev">
+    <div class="scard" id="pc-sr"></div>
+    <div class="scard" id="pc-pr"></div>
+    <div class="scard hl" id="pc-tr"></div>
+  </div>
+
+  <!-- ROI Row -->
+  <div class="g4roi">
+    <div class="scard" id="pc-ld"></div>
+    <div class="scard" id="pc-at"></div>
+    <div class="scard" id="pc-roi"></div>
+    <div class="scard" id="pc-ac"></div>
+  </div>
+
+  <!-- Comparison -->
+  <div class="card mb18">
+    <div class="slabel">Free Event vs. Cash Flow Engine™</div>
+    <div class="cmp-hdr">
+      <span class="ch" style="text-align:left;">Metric</span>
+      <span class="ch" style="color:#dc2626;">Free Event</span>
+      <span class="ch" style="color:#15803d;">Cash Flow Engine</span>
+      <span class="ch">Difference</span>
+    </div>
+    <div id="pc-cmp"></div>
+  </div>
+
+  <!-- Insight -->
+  <div class="insight" id="pc-ins"></div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="cta-eye">Now you know your numbers — here's what to do next</div>
+  <h2>Get Unstuck In 90 Minutes Or Less — Guaranteed.</h2>
+  <p class="cta-body">Book a <strong style="color:#fbbf24;">Red Diamond Offer X-Ray</strong> — a one-on-one 90-minute session where we diagnose exactly what your market is rejecting, engineer your offer, and hand you a complete action plan for your $100K Day.</p>
+  <div class="vstack">
+    <div class="vr"><span>✓ Pre-Session Offer Diagnostic</span><span>$197</span></div>
+    <div class="vr"><span>✓ 60-Min Red Diamond Offer X-Ray on Zoom</span><span>$597</span></div>
+    <div class="vr"><span>✓ Engineered Red Diamond Offer™</span><span>$297</span></div>
+    <div class="vr"><span>✓ Written X-Factor Report</span><span>$300</span></div>
+    <div class="vr"><span>✓ 14-Day Direct Email Access</span><span>$197</span></div>
+    <div class="vr"><span>✓ Full Session Recording</span><span>Priceless</span></div>
+    <div class="vtot"><span>Total Value</span><span>$1,588</span></div>
+  </div>
+  <p class="cta-sub">My VIP clients pay $1,500 for a single hour of strategic guidance like this. You're getting the same calibre of work, a complete action plan, and a money-back guarantee — for $299.</p>
+  <a href="https://coachlaunch.com/mapping-a" class="cta-btn" target="_blank">Book My Red Diamond Offer X-Ray — $299 →</a>
+  <div class="cta-guar">🔒 Zero Risk — If you don't walk away with a genuine breakthrough and a clear path to your $100K Day, I'll refund every cent. No questions asked.</div>
+</div>
+
+<div class="footer">Cash Flow Engine™ Calculator — $100K Day Formula™ · CoachLaunch.com</div>
+</div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const PH = {
+  1:{name:"Phase 1 — Launch",ticket:0,vip:0,vipR:0,bump:0,bumpR:0,show:35,free:true},
+  2:{name:"Phase 2 — Execute",ticket:1,vip:27,vipR:15,bump:0,bumpR:0,show:50},
+  3:{name:"Phase 3 — Growth",ticket:27,vip:97,vipR:20,bump:17,bumpR:35,show:55},
+  4:{name:"Phase 4 — Mastery",ticket:97,vip:297,vipR:25,bump:47,bumpR:40,show:60},
+};
+const CL = {
+  2:{sf:0,sfL:"Discovery Call Fee",sfH:"$0 = free call",pp:997,ppL:"Beta Offer Price",ppH:"Beta: $997",bk:10,ss:65,en:40},
+  3:{sf:299,sfL:"Strategy Session Fee",sfH:"Default: $299",pp:5964,ppL:"Program Price",ppH:"Default: $5,964",bk:7,ss:90,en:65},
+  4:{sf:997,sfL:"Deposit (collected now)",sfH:"Deposit close: $997",pp:9003,ppL:"Balance (before delivery)",ppH:"Balance: $9,003 · Total: $10K",bk:6,ss:90,en:65},
+};
+const PDESC = {
+  1:{cls:"pd1",col:"#6d28d9",title:"Phase 1 — Launch",body:"Free event — maximum reach, zero friction. Goal is message validation, not sales. The bribe on your thank-you page is the lever that fills the room."},
+  2:{cls:"pd2",col:"#1d4ed8",title:"Phase 2 — Execute",body:"$1 ticket — filters freebie seekers, attracts real buyers. VIP upsell on confirmation page."},
+  3:{cls:"pd3",col:"#92400e",title:"Phase 3 — Growth",body:"$27 ticket + workbook bump + $97 VIP — your first proper revenue layer before the close."},
+  4:{cls:"pd4",col:"#15803d",title:"Phase 4 — Mastery",body:"$97 ticket + 2 bumps + 2-option VIP — maximum pre-close revenue at scale."},
+};
+const PBANNER = {
+  2:`<div class="phase-desc pd2"><div class="pdtitle" style="color:#1d4ed8;">Phase 2 — What You're Optimising For</div>Phase 2 is about <strong>proving people will pay.</strong> Your $1 ticket filters out freebie seekers. The goal is your first $10,000 month and 5 paying clients — not scale, not perfection. Run the event, pitch your beta offer at $997, collect testimonials, and sharpen everything before Phase 3.</div>`,
+  3:`<div class="phase-desc pd3"><div class="pdtitle" style="color:#92400e;">Phase 3 — What You're Optimising For</div>Phase 3 is about <strong>learning to close from the stage.</strong> You have a validated offer and real testimonials — now you deploy the Sniper Close in a longer, deeper masterclass. The ticket, bump, and VIP system starts recovering meaningful ad spend before you pitch anything. Goal: your first <strong>$25K day.</strong></div>`,
+  4:`<div class="phase-desc pd4"><div class="pdtitle" style="color:#15803d;">Phase 4 — What You're Optimising For</div>Phase 4 is the destination — <strong>a repeatable $100K day every 28 days.</strong> Your pre-close revenue should cover most or all of your ad spend before the pitch even starts. The Deposit Close ($997 now, balance before delivery) lets you collect $100K+ in a single event cycle.</div>`,
+};
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+let cur = 3, bribeOn = false;
+const $ = id => document.getElementById(id);
+const g = id => parseFloat($(id)?.value) || 0;
+const sv = (id,v) => { if($(id)) $(id).value = v; };
+const sh = id => $(id)?.classList.remove('hidden');
+const hd = id => $(id)?.classList.add('hidden');
+const st = (id,h) => { if($(id)) $(id).innerHTML = h; };
+
+function fmt(n){ if(n>=1e6) return '$'+(n/1e6).toFixed(1)+'M'; if(n>=1000) return '$'+Math.round(n).toLocaleString(); return '$'+Math.round(n); }
+function fmtX(n){ return n.toFixed(2)+'×'; }
+function pct(n){ return Math.round(n)+'%'; }
+function bdg(cls,lbl){ return `<span class="bdg ${cls}">${lbl}</span>`; }
+function roiSt(r){ if(r>=4) return['bpass','Strong']; if(r>=2) return['bpass','Profitable']; if(r>=1) return['bwarn','Marginal']; return['bfail','Underwater']; }
+
+function scard(id,label,value,sub,badge='',cls=''){
+  const el = $(id); if(!el) return;
+  const vStyle = cls==='hl'?' style="color:#92400e"' : cls==='a2c'?' style="color:#6d28d9"' : cls==='gc'?' style="color:#15803d"' : '';
+  el.innerHTML = `<div class="sc-label">${label} ${badge}</div><div class="sc-val"${vStyle}>${value}</div>${sub?`<div class="sc-sub">${sub}</div>`:''}`;
+}
+function cmpRow(lbl,a,b,d,good=true,ac='#dc2626',bc='#15803d'){
+  return `<div class="cmp-row"><span class="cl">${lbl}</span><span class="ca" style="color:${ac}">${a}</span><span class="cb" style="color:${bc}">${b}</span><span class="cd ${good?'':''}">+${d}</span></div>`;
+}
+
+// ─── PHASE SWITCH ─────────────────────────────────────────────────────────────
+function setPhase(p){
+  cur = p;
+  [1,2,3,4].forEach(n=>{ $(('tab'+n)).className='tab'+(n===p?' a'+p:''); });
+  const pd = PDESC[p];
+  $('phase-desc').className = 'phase-desc '+pd.cls;
+  $('phase-desc').innerHTML = `<strong style="color:${pd.col}">${pd.title}</strong> — ${pd.body}`;
+  if(p===1){ sh('p1'); hd('ppaid'); c1(); }
+  else { hd('p1'); sh('ppaid'); loadPaid(p); cp(); }
+}
+
+function loadPaid(p){
+  const ph=PH[p], cl=CL[p];
+  sv('ptk',ph.ticket); sv('psh',ph.show);
+  sv('pvp',ph.vip); sv('pvr',ph.vipR);
+  sv('pbp',ph.bump); sv('pbr',ph.bumpR);
+  sv('psf',cl.sf); sv('pbkr',cl.bk);
+  sv('pss',cl.ss); sv('per',cl.en);
+  sv('ppp',cl.pp);
+  st('lbl-sf',cl.sfL); st('hnt-sf',cl.sfH);
+  st('lbl-pp',cl.ppL); st('hnt-pp',cl.ppH);
+  st('hnt-bk',p===2?'~10% of attendees':p===3?'~7% of attendees':'~6% of attendees');
+  st('hnt-bs',p===2?'Free call: 60–70%':'Paid: 85–95%');
+  if(p>=3) sh('bump-row'); else hd('bump-row');
+  if(p===4) sh('ph4-note'); else hd('ph4-note');
+  st('paid-banner', PBANNER[p]);
+}
+
+// ─── BRIBE TOGGLE ────────────────────────────────────────────────────────────
+function setBribe(on){
+  bribeOn = on;
+  $('bfree').className='tbtn'+(on?'':' on');
+  $('bpaid').className='tbtn'+(on?' on':'');
+  if(on){ sh('bribe-paid'); hd('bribe-free'); }
+  else { hd('bribe-paid'); sh('bribe-free'); }
+  c1();
+}
+
+// ─── PHASE 1 CALC ────────────────────────────────────────────────────────────
+function c1(){
+  const as=g('p1as'),cpl=g('p1cpl'),ev=g('p1ev');
+  const sb=g('p1sb'),sw=g('p1sw'),bp=g('p1bp'),br=g('p1br');
+  const p2p=g('p1p2p'),p2s=g('p1p2s'),bk=g('p1bk'),en=g('p1en');
+
+  const leads=Math.floor(as/cpl), lpe=Math.floor(leads/ev);
+  const aBase=Math.floor(lpe*(sb/100)), aBrib=Math.floor(lpe*(sw/100));
+  const xpe=aBrib-aBase, xmo=xpe*ev;
+  const tReg=lpe*ev, tBase=aBase*ev, tBrib=aBrib*ev;
+  const lift=sw-sb;
+
+  const brev = bribeOn ? Math.floor(lpe*(br/100))*bp*ev : 0;
+  const xBk=Math.floor(tBrib*(bk/100))-Math.floor(tBase*(bk/100));
+  const xCl=Math.floor(xBk*(en/100));
+  const xPR=xCl*p2p, xSR=xBk*p2s, xRev=xPR+xSR;
+
+  // Show lift box
+  st('p1lift',`<strong style="color:#6d28d9;">Lift: +${lift} percentage points</strong><br>${xpe>0?`+${xpe} extra per event · +${xmo} per month`:'Adjust rates above to see lift'}`);
+  if(bribeOn) st('p1brev',`<strong style="color:#b45309;">Bribe revenue: ${fmt(brev)}/month</strong><br>Covers ${as>0?pct(brev/as*100):'—'} of ad spend`);
+
+  // Attendance cards
+  scard('p1-reg','Registrants / Month',tReg.toLocaleString(),`${lpe} per event × ${ev}`);
+  scard('p1-base','Attendees — No Bribe',tBase.toLocaleString(),`${sb}% show rate`,bdg('bwarn','Baseline'));
+  scard('p1-brib','Attendees — With Bribe',tBrib.toLocaleString(),`${sw}% show rate`,bdg('bpass','With Bribe'),'a2c');
+  scard('p1-extr','Extra Attendees / Month',`+${xmo}`,`+${xpe} per event`,bdg('bpass',`+${lift}pp lift`),'hl');
+
+  // Downstream cards
+  scard('p1-xbk','Extra Bookings from Bribe',xBk,`from ${xmo} extra attendees`,xBk>0?bdg('bpass','Extra'):bdg('bwarn','0'));
+  scard('p1-xcl','Extra Clients from Bribe',xCl,`at ${en}% enrollment rate`,xCl>0?bdg('bpass','Extra'):bdg('bwarn','0'));
+  scard('p1-xrv','Extra Revenue from Bribe',fmt(xRev),`${fmt(xPR)} program + ${fmt(xSR)} sessions`,xRev>0?bdg('bpass','Downstream'):bdg('bwarn','Adjust inputs'),'hl');
+
+  // Comparison
+  let cmp = cmpRow('Show Rate',`${sb}%`,`${sw}%`,`${lift}pp`,true,'#94a3b8','#6d28d9');
+  cmp += cmpRow('Attendees / Month',tBase.toLocaleString(),tBrib.toLocaleString(),xmo,true,'#94a3b8','#6d28d9');
+  if(bribeOn) cmp += cmpRow('Bribe Revenue / Month','$0',fmt(brev),fmt(brev).replace('$',''),true,'#94a3b8','#15803d');
+  cmp += cmpRow('Extra Phase 2 Clients','0',xCl,xCl,true,'#94a3b8','#6d28d9');
+  cmp += cmpRow('Downstream Revenue','$0',fmt(xRev),fmt(xRev).replace('$',''),true,'#94a3b8','#6d28d9');
+  st('p1-cmp',cmp);
+
+  // Insight
+  const wins=[],issues=[];
+  if(lift>=15) wins.push(`A ${lift} percentage point lift in show rate puts ${xmo} extra people per month in your room — that's ${xmo*12} more per year hearing your message.`);
+  else if(lift>0) wins.push(`+${lift}pp show rate lift = +${xmo} extra attendees per month.`);
+  if(xRev>0) wins.push(`Those extra attendees translate to ${fmt(xRev)} in additional Phase 2 revenue — from a bribe that ${bribeOn?`costs you $${bp} per taker`:'costs you nothing to deliver'}.`);
+  if(bribeOn && brev>0) wins.push(`The paid bribe generates ${fmt(brev)}/month while simultaneously filling the room.`);
+  if(sb<30) issues.push("A 30% or lower show rate on a free event usually means your confirmation sequence isn't doing enough work. A bribe alone won't fix a broken funnel.");
+  if(xmo===0) issues.push("No attendance lift — check that your bribe show rate is higher than your baseline rate.");
+  if(!bribeOn && lift>0) wins.push(`Free bribes require zero cost. A simple "show up live and get [bonus]" in your confirmation email is enough to start.`);
+  let ins='<div class="slabel">The Insight</div>';
+  issues.forEach(i=>ins+=`<div class="ins-item"><span class="ins-ico" style="color:#dc2626">✗</span><span class="ins-txt">${i}</span></div>`);
+  wins.forEach(w=>ins+=`<div class="ins-item"><span class="ins-ico" style="color:#15803d">✓</span><span class="ins-txt">${w}</span></div>`);
+  st('p1-ins',ins);
+}
+
+// ─── PAID PHASES CALC ─────────────────────────────────────────────────────────
+function cp(){
+  const as=g('pas'),cpl=g('pcpl'),ev=g('pev');
+  const tk=g('ptk'),sh=g('psh'),vp=g('pvp'),vr=g('pvr');
+  const bp=cur>=3?g('pbp'):0, br=cur>=3?g('pbr'):0;
+  const sf=g('psf'),bkr=g('pbkr'),ss=g('pss'),er=g('per'),pp=g('ppp');
+
+  // Traffic
+  const leads=Math.floor(as/cpl), lpe=Math.floor(leads/ev);
+
+  // Pre-close (at registration)
+  const tkRev=lpe*tk;
+  const bmRev=bp>0?Math.floor(lpe*(br/100))*bp:0;
+  const vpRev=Math.floor(lpe*(vr/100))*vp;
+  const pcEv=tkRev+bmRev+vpRev, pcMo=pcEv*ev;
+
+  // Attendees
+  const atEv=Math.floor(lpe*(sh/100)), atMo=atEv*ev;
+
+  // Close funnel from ATTENDEES
+  const sessBk=Math.floor(atMo*(bkr/100));
+  const sessOk=Math.floor(sessBk*(ss/100));
+  const clients=Math.floor(sessOk*(er/100));
+  const srRev=sessBk*sf, prRev=clients*pp;
+  const totRev=pcMo+srRev+prRev;
+  const freRev=prRev; // without ticket system
+  const roi=as>0?totRev/as:0, roiFr=as>0?freRev/as:0;
+  const net=totRev-as, pcPct=as>0?(pcMo/as*100):0;
+  const pcCov=pcMo>=as;
+
+  // Phase 4 deposit note
+  if(cur===4) st('ph4-note',`Total per client: <strong style="color:#15803d;">$${(sf+pp).toLocaleString()}</strong> · $${sf.toLocaleString()} deposit now + $${pp.toLocaleString()} balance before delivery`);
+
+  // Pre-close cards
+  scard('pc-tk','Ticket Revenue',fmt(tkRev*ev),`${lpe} reg × $${tk} × ${ev} events`);
+  scard('pc-bm','Order Bumps',fmt(bmRev*ev),cur>=3?`${br}% take rate`:'Available from Phase 3');
+  scard('pc-vp','VIP Upgrades',fmt(vpRev*ev),`${vr}% take × $${vp}`);
+  const pcBdg=pcCov?bdg('bpass','Covers Ads'):pcPct>=50?bdg('bwarn',`${Math.round(pcPct)}% covered`):bdg('bfail',`${Math.round(pcPct)}% covered`);
+  scard('pc-tot','Total Pre-Close',fmt(pcMo),`${Math.round(pcPct)}% of ad spend recovered`,pcBdg,'hl');
+
+  // Revenue cards
+  const srLbl=cur===4?'Deposit Revenue':cur===2?'Discovery Call Revenue':'Session Revenue';
+  scard('pc-sr',srLbl,fmt(srRev),`${sessBk} booked from ${atMo} attendees`,bdg(sf>0?'bpass':'binfo',`${sessOk} completed`));
+  const prLbl=cur===4?'Balance Revenue':'Program Revenue';
+  scard('pc-pr',prLbl,fmt(prRev),`${clients} clients × $${pp.toLocaleString()}${cur===4?' balance':''}`,clients>0?bdg('bpass',`${clients} enrolled`):bdg('bwarn','0 enrolled'));
+  const [rs,rl]=roiSt(roi);
+  const totSub=cur===4?`≈ ${clients} × $${(sf+pp).toLocaleString()} per client`:`Net profit: ${fmt(net)}`;
+  scard('pc-tr','Total Monthly Revenue',fmt(totRev),totSub,bdg(rs,rl),'hl');
+
+  // ROI row
+  scard('pc-ld','Total Leads / Month',leads.toLocaleString(),`$${cpl} CPL · ${lpe} per event`);
+  scard('pc-at','Attendees / Month',atMo.toLocaleString(),`${atEv} per event · ${sh}% show rate`);
+  scard('pc-roi','Day 0 ROI',fmtX(roi),`vs ${fmtX(roiFr)} without ticket system`,bdg(rs,rl));
+  const acBdg=pcPct>=100?bdg('bpass','Fully covered'):pcPct>=50?bdg('bwarn','Partially'):bdg('bfail','Needs work');
+  scard('pc-ac','Ad Spend Covered Pre-Close',`${Math.round(pcPct)}%`,'tickets + bumps + VIP before first pitch',acBdg);
+
+  // Comparison
+  let cmp='';
+  cmp+=`<div class="cmp-row"><span class="cl">Pre-Close Revenue</span><span class="ca" style="color:#dc2626">$0</span><span class="cb" style="color:#15803d">${fmt(pcMo)}</span><span class="cd">+${fmt(pcMo)}</span></div>`;
+  cmp+=`<div class="cmp-row"><span class="cl">Session Revenue</span><span class="ca" style="color:#dc2626">$0</span><span class="cb" style="color:#15803d">${fmt(srRev)}</span><span class="cd">+${fmt(srRev)}</span></div>`;
+  cmp+=`<div class="cmp-row"><span class="cl">Program Revenue</span><span class="ca" style="color:#475569">${fmt(freRev)}</span><span class="cb" style="color:#15803d">${fmt(prRev)}</span><span class="cd">Same</span></div>`;
+  cmp+=`<div class="cmp-row"><span class="cl">Total Monthly Revenue</span><span class="ca" style="color:#dc2626">${fmt(freRev)}</span><span class="cb" style="color:#15803d">${fmt(totRev)}</span><span class="cd">+${fmt(totRev-freRev)}</span></div>`;
+  cmp+=`<div class="cmp-row"><span class="cl">Ad Spend Recovered</span><span class="ca" style="color:#dc2626">0%</span><span class="cb" style="color:#15803d">${Math.round(pcPct)}%</span><span class="cd">+${Math.round(pcPct)}%</span></div>`;
+  cmp+=`<div class="cmp-row"><span class="cl">Day 0 ROI</span><span class="ca" style="color:#dc2626">${fmtX(roiFr)}</span><span class="cb" style="color:#15803d">${fmtX(roi)}</span><span class="cd">+${(roi-roiFr).toFixed(2)}×</span></div>`;
+  st('pc-cmp',cmp);
+
+  // Insight
+  const wins=[],issues=[];
+  if(pcPct<30) issues.push(`Pre-close revenue is covering only ${Math.round(pcPct)}% of ad spend. Every sale you close is also carrying the ad cost — that's break-even pressure you don't need.`);
+  if(roi<1) issues.push("You're spending more than you're making. Tighten CPL, increase ticket price, or improve enrollment rates before scaling.");
+  if(clients===0) issues.push("Zero clients enrolled. Check lead volume and session booking rate.");
+  if(pcCov) wins.push("Your tickets, bumps, and VIP upgrades cover 100% of ad spend. Everything from the close is pure profit.");
+  else if(pcPct>=50) wins.push(`Pre-close revenue covers ${Math.round(pcPct)}% of ad spend — dramatically reducing break-even pressure.`);
+  const [rs2,rl2]=roiSt(roi);
+  if(roi>=4) wins.push(`${fmtX(roi)} ROI — exceptional. You're returning $${Math.round(roi)} for every $1 spent.`);
+  else if(roi>=2) wins.push(`${fmtX(roi)} ROI — strong and scalable.`);
+  if(clients>=5) wins.push(`${clients} clients per month at $${pp.toLocaleString()} = ${fmt(prRev)} in program revenue.`);
+  if(srRev>=as*0.4) wins.push(`Strategy sessions recover ${Math.round(srRev/as*100)}% of monthly ad spend before a single client enrolls.`);
+  let ins='<div class="slabel">The Insight</div>';
+  issues.forEach(i=>ins+=`<div class="ins-item"><span class="ins-ico" style="color:#dc2626">✗</span><span class="ins-txt">${i}</span></div>`);
+  wins.forEach(w=>ins+=`<div class="ins-item"><span class="ins-ico" style="color:#15803d">✓</span><span class="ins-txt">${w}</span></div>`);
+  st('pc-ins',ins);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+setBribe(false);
+setPhase(3);
+</script>
+</body>
+</html>
