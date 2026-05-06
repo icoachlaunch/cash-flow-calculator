@@ -278,11 +278,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
   </div>
 
-  <!-- VRP Upgrade 1 -->
+  <!-- VIP Upgrade 1 -->
   <div class="addon-row">
     <div class="addon-main">
       <div class="addon-info">
-        <div class="addon-title">VRP Upgrade 1</div>
+        <div class="addon-title">VIP Upgrade 1</div>
         <div class="addon-sub">Confirmation page upsell · shown after ticket purchase</div>
       </div>
       <div class="toggle no-mb addon-toggle">
@@ -291,17 +291,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       </div>
     </div>
     <div id="vrp1-fields" class="addon-fields hidden">
-      <div class="ig" style="margin-bottom:0;"><div class="ilabel"><label>VRP 1 Price</label><span class="hint">e.g. $97</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="vrp1-p" value="97" min="1" step="10" oninput="calc()"></div></div>
+      <div class="ig" style="margin-bottom:0;"><div class="ilabel"><label>VIP 1 Price</label><span class="hint">e.g. $97</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="vrp1-p" value="97" min="1" step="10" oninput="calc()"></div></div>
       <div class="ig" style="margin-bottom:0;"><div class="ilabel"><label>Take Rate</label><span class="hint">15–25% typical</span></div><div class="iw"><input type="number" id="vrp1-r" value="20" min="1" max="80" oninput="calc()"><span class="isfx">%</span></div></div>
     </div>
   </div>
 
-  <!-- VRP Upgrade 2 -->
+  <!-- VIP Upgrade 2 -->
   <div class="addon-row">
     <div class="addon-main">
       <div class="addon-info">
-        <div class="addon-title">VRP Upgrade 2</div>
-        <div class="addon-sub">Premium tier · second upsell after VRP 1</div>
+        <div class="addon-title">VIP Upgrade 2</div>
+        <div class="addon-sub">Premium tier · second upsell after VIP 1</div>
       </div>
       <div class="toggle no-mb addon-toggle">
         <button class="tbtn on0" id="vrp2-off-btn" onclick="setAddon('vrp2',false)">Off</button>
@@ -309,7 +309,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       </div>
     </div>
     <div id="vrp2-fields" class="addon-fields hidden">
-      <div class="ig" style="margin-bottom:0;"><div class="ilabel"><label>VRP 2 Price</label><span class="hint">e.g. $297</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="vrp2-p" value="297" min="1" step="10" oninput="calc()"></div></div>
+      <div class="ig" style="margin-bottom:0;"><div class="ilabel"><label>VIP 2 Price</label><span class="hint">e.g. $297</span></div><div class="iw"><span class="ipfx">$</span><input type="number" id="vrp2-p" value="297" min="1" step="10" oninput="calc()"></div></div>
       <div class="ig" style="margin-bottom:0;"><div class="ilabel"><label>Take Rate</label><span class="hint">10–20% typical</span></div><div class="iw"><input type="number" id="vrp2-r" value="15" min="1" max="80" oninput="calc()"><span class="isfx">%</span></div></div>
     </div>
   </div>
@@ -669,10 +669,10 @@ function calc(){
     scard('o-bm','Order Bump', bumpOn?fmt(bumpRev*ev):'$0',
       bumpOn?`${bumpCnt*ev} bumps · ${g('bump-r')}% take`:'Enable above',
       bumpOn?bdg('bpass','Active'):bdg('bwarn','Off'));
-    scard('o-v1','VRP Upgrade 1', vrp1On?fmt(vrp1Rev*ev):'$0',
+    scard('o-v1','VIP Upgrade 1', vrp1On?fmt(vrp1Rev*ev):'$0',
       vrp1On?`${vrp1Cnt*ev} upgrades · ${g('vrp1-r')}% take`:'Enable above',
       vrp1On?bdg('bpass','Active'):bdg('bwarn','Off'));
-    scard('o-v2','VRP Upgrade 2', vrp2On?fmt(vrp2Rev*ev):'$0',
+    scard('o-v2','VIP Upgrade 2', vrp2On?fmt(vrp2Rev*ev):'$0',
       vrp2On?`${vrp2Cnt*ev} upgrades · ${g('vrp2-r')}% take`:'Enable above',
       vrp2On?bdg('bpass','Active'):bdg('bwarn','Off'));
     const pcBdg=pcMo>=asMo?bdg('bpass','Covers Ads'):pcPct>=50?bdg('bwarn',`${Math.round(pcPct)}% covered`):bdg('bfail',`${Math.round(pcPct)}% covered`);
