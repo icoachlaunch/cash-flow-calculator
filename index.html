@@ -473,8 +473,8 @@ let eventType = 'free';
 let brideMode = 0;
 let bumpOn = false, vrp1On = false, vrp2On = false;
 
-const FREE_DEF = {as:750,cpl:10,ev:4,sb:20,sw:60,'br-p':27,'br-r':20,sf:0,bkr:2,ss:65,er:50,pp:997};
-const PAID_DEF = {as:1700,cpl:15,ev:4,tk:27,sb:55,sf:299,bkr:7,ss:90,er:65,pp:5964,'bump-p':17,'bump-r':35,'vrp1-p':97,'vrp1-r':20,'vrp2-p':297,'vrp2-r':15};
+const FREE_DEF = {as:1000,cpl:10,ev:4,sb:30,sw:60,'br-p':27,'br-r':20,sf:0,bkr:3,ss:65,er:50,pp:2997};
+const PAID_DEF = {as:1700,cpl:15,ev:4,tk:27,sb:55,sf:299,bkr:7,ss:90,er:65,pp:5997,'bump-p':17,'bump-r':35,'vrp1-p':97,'vrp1-r':20,'vrp2-p':297,'vrp2-r':15};
 
 // ─── EVENT TYPE ───────────────────────────────────────────────────────────────
 function setEventType(type){
@@ -488,7 +488,7 @@ function setEventType(type){
     st('sb-label','Baseline Show Rate'); st('sb-hint','No bribe avg: 15–25%');
     st('cpl-hint','Free events: $8–$12');
     st('sf-label','Session Fee'); st('sf-hint','$0 = free call');
-    st('bkr-hint','2–5% of attendees'); st('ss-hint','Free call: 60–70%');
+    st('bkr-hint','3–5% of attendees'); st('ss-hint','Free call: 60–70%');
     st('pp-hint','Your beta offer price');
     setMode(0);
   } else {
@@ -607,17 +607,18 @@ function calc(){
 
   if(eventType==='free' && brideMode===2){
     st('bribe-rev-box', brRev>0
-      ? `<strong style="color:#fbbf24;">Bribe revenue: ${fmt(brRev)}/month</strong> · ${as>0?Math.round(brRev/(as*ev)*100):'—'}% of ad spend per event`
+      ? `<strong style="color:#fbbf24;">Bribe revenue: ${fmt(brRev)}/month</strong> · ${as>0?Math.round(brRev/(as*ev)*100):'—'}% of monthly ad spend`
       : `<span style="color:#2d3748;">Enter price and take rate to see bribe revenue</span>`);
   }
 
   // Close funnel
   const sf=g('sf'), bkr=g('bkr'), ss=g('ss'), er=g('er'), pp=g('pp');
-  const sessBk = Math.floor(atMo*(bkr/100));
-  const sessOk = Math.floor(sessBk*(ss/100));
-  const clients = Math.floor(sessOk*(er/100));
-  const srRev  = sessBk*sf;
-  const prRev  = clients*pp;
+  const sessBk  = Math.round(atMo*(bkr/100));
+  const sessOk  = Math.round(sessBk*(ss/100));
+  const clients = Math.round(sessOk*(er/100));
+  const sessBkEv = ev>0 ? Math.round(sessBk/ev) : 0; // consistent per-event figure
+  const srRev   = sessBk*sf;
+  const prRev   = clients*pp;
 
   // Totals
   const asMo     = as*ev;
@@ -653,7 +654,7 @@ function calc(){
   } else {
     scard('o-base','Attendees / Event', aShow.toLocaleString(),
       `${atMo} per month · ${sb}% show rate`, bdg('bblue','Attendees'));
-    scard('o-brib','Booked / Event', Math.floor(aShow*(bkr/100)).toLocaleString(),
+    scard('o-brib','Booked / Event', sessBkEv.toLocaleString(),
       `${sessBk} per month · ${bkr}% booking rate`, bdg('binfo','Bookings'), 'a2c');
     scard('o-extra','Pre-Close / Event', fmt(pcEv),
       `${fmt(pcMo)} per month`,
@@ -684,9 +685,9 @@ function calc(){
     `${bkr}% of ${atMo} attendees`,
     sessBk>0?bdg('bpass',`${sessBk} booked`):bdg('bwarn','0 booked'));
   scard('o-ok', sf>0?'Calls Completed':'Discovery Calls',
-    sf>0?sessOk.toLocaleString():`${sessOk} showed`,
-    sf>0?`${sessOk} of ${sessBk} showed up`:'Free call · feeds enrollment',
-    bdg('binfo',`${sessOk} completed`));
+    sessOk.toLocaleString(),
+    sf>0?`${sessOk} of ${sessBk} showed · ${ss}% show rate`:`${sessOk} of ${sessBk} showed · free call`,
+    bdg('binfo',sessOk>0?`${sessOk} completed`:'None'));
   scard('o-cl','Clients Enrolled', clients.toLocaleString(),
     `${er}% enrollment · ${ss}% booking show rate`,
     clients>0?bdg('bpass',`${clients} clients`):bdg('bwarn','0 clients'));
@@ -697,28 +698,30 @@ function calc(){
   // ── Revenue Summary ──────────────────────────────────────────────────────────
   // First row: additional revenue stream card
   if(eventType==='free' && brideMode===2 && brRev>0){
-    scard('o-addl','Paid Bribe Revenue', fmt(brRev),
+    scard('o-addl','Bribe Revenue', fmt(brRev),
       `${as>0?Math.round(brRev/asMo*100):'—'}% of monthly ad spend`,
       bdg('bpass','Active'));
-  } else if(srRev>0){
-    scard('o-addl','Session Revenue', fmt(srRev),
-      `${sessBk} sessions × $${sf}`, bdg('bpass','Revenue'));
   } else if(eventType==='paid' && pcMo>0){
     scard('o-addl','Pre-Close Revenue', fmt(pcMo),
-      `${Math.round(pcPct)}% of ad spend recovered`,
+      `${Math.round(pcPct)}% of ad spend recovered before the pitch`,
       bdg(pcPct>=100?'bpass':pcPct>=50?'bwarn':'bfail',`${Math.round(pcPct)}% covered`));
+  } else if(srRev>0){
+    scard('o-addl','Session Revenue', fmt(srRev),
+      `${sessBk} session${sessBk===1?'':'s'} × $${sf}`, bdg('bpass','Revenue'));
   } else {
     scard('o-addl','Additional Revenue','$0',
-      eventType==='free'?'Enable bribe or paid session to add revenue':'Enable add-ons to build pre-close',
+      eventType==='free'?'Enable paid bribe or paid session to add revenue':'Enable add-ons to build pre-close',
       bdg('bwarn','None'));
   }
-  scard('o-morev','Total Revenue / Month', fmt(totRevMo),
-    `${clients} clients · Net: ${fmt(net)}`, bdg(rs,rl), 'a2c');
+  const totSub = eventType==='paid' && pcMo>0
+    ? `Pre-close: ${fmt(pcMo)} · ${clients} client${clients===1?'':'s'} · Net: ${fmt(net)}`
+    : `${clients} client${clients===1?'':'s'}${brRev>0?' · Bribe: '+fmt(brRev):''} · Net: ${fmt(net)}`;
+  scard('o-morev','Total Revenue / Month', fmt(totRevMo), totSub, bdg(rs,rl), 'a2c');
   scard('o-yrrev','Yearly Revenue', fmt(totRevYr),
     `${ev} events/month × 12`, bdg(totRevYr>0?'bpass':'bwarn',totRevYr>0?'Projected':'$0'), 'gc');
 
-  scard('o-roi','Day 0 ROI', fmtX(roi),
-    'total revenue ÷ ad spend', bdg(rs,rl));
+  scard('o-roi','Revenue ROI', fmtX(roi),
+    'total monthly revenue ÷ total ad spend', bdg(rs,rl));
   scard('o-net','Net Profit / Month', fmt(net),
     net>=0?'after monthly ad spend':'ad spend exceeds revenue',
     bdg(net>=0?'bpass':'bfail',net>=0?'Profitable':'Underwater'));
@@ -727,8 +730,9 @@ function calc(){
       'by pre-close before first pitch',
       bdg(pcPct>=100?'bpass':pcPct>=50?'bwarn':'bfail',`${Math.round(pcPct)}%`));
   } else {
-    scard('o-adcov','Event Type','Free Event',
-      'No pre-close — all revenue from close', bdg('binfo','Free'));
+    scard('o-adcov','Cost Per Client', clients>0?fmt(asMo/clients):'—',
+      clients>0?`${fmt(asMo)} ad spend ÷ ${clients} client${clients===1?'':'s'}`:'Enroll a client to see acquisition cost',
+      bdg(clients>0?'binfo':'bwarn',clients>0?'Per Client':'None'));
   }
 
   // ── Yearly Projection ────────────────────────────────────────────────────────
@@ -743,8 +747,15 @@ function calc(){
   const scenarios=[1,2,4,8,12];
   let rows='';
   scenarios.forEach(n=>{
-    const moLeads=lpe*n, moRev=totRevEv*n, yrRev=moRev*12;
-    const active=n===Math.round(ev);
+    const moLeads  = lpe*n;
+    const atMoN    = aShow*n;
+    const bkN      = Math.round(atMoN*(bkr/100));
+    const okN      = Math.round(bkN*(ss/100));
+    const clN      = Math.round(okN*(er/100));
+    const brRevN   = (eventType==='free'&&brideMode===2) ? Math.floor(lpe*(g('br-r')/100))*g('br-p')*n : 0;
+    const moRev    = pcEv*n + brRevN + bkN*sf + clN*pp;
+    const yrRev    = moRev*12;
+    const active   = n===Math.round(ev);
     rows+=`<tr${active?' class="scen-active"':''}><td>${n} event${n===1?'':'s'}/month${active?' ◀':''}</td><td>${moLeads.toLocaleString()}</td><td>${fmt(moRev)}</td><td class="scen-yr">${fmt(yrRev)}</td></tr>`;
   });
   st('scen-body',rows);
